@@ -74,6 +74,7 @@ public class BookStoreServer {
      * @param userId
      * @return
      */
+    
     public List<MyCard> selectCollect(int userId){ 	   	
     	return bookStoreMapper.selectMyCollect(userId);
     }
@@ -218,4 +219,15 @@ public class BookStoreServer {
     public int updateOrderEdit(int orderStatus,int orderId) {
     	return bookStoreMapper.updateOrder(orderStatus, orderId); 
     }
+    
+    /**
+     * 
+     * @param orderStatus
+     * @param orderId
+     * @return
+     */
+    public int updateUserInfo(UserInfo userInfo) {
+    	return bookStoreMapper.updateUserInfo(userInfo); 
+    }
+    
 }

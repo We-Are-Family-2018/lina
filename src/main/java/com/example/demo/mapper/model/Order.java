@@ -9,6 +9,7 @@ public class Order {
 	private int number;
 	private String img;
 	private int orderStatus;
+	private String bookIntroduce;
 
 	public int getUserId() {
 		return userId;
@@ -72,6 +73,14 @@ public class Order {
 
 	public void setOrderStatus(int orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public String getBookIntroduce() {
+		return bookIntroduce;
+	}
+
+	public void setBookIntroduce(String bookIntroduce) {
+		this.bookIntroduce = bookIntroduce;
 	}
 
 }

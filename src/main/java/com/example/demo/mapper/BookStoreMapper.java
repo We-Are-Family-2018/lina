@@ -140,7 +140,7 @@ public interface BookStoreMapper {
 	  * @return
 	  */
 	 @Select({
-		 "select c.book_id,c.number,c.user_id,b.book_img,b.book_name,b.book_price " ,
+		 "select c.book_id,c.number,c.user_id,b.book_img,b.book_name,b.book_price,b.book_introduce" ,
 		 "from card c INNER JOIN book b on c.book_id = b.book_id",
 		 "where c.user_id = #{userId,jdbcType=INTEGER} ORDER BY c.create_dt"
 	    })
@@ -151,6 +151,7 @@ public interface BookStoreMapper {
 	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
+	        @Result(column="book_introduce", property="bookIntroduce", jdbcType=JdbcType.INTEGER),
 	    })
 	    List<MyCard> selectMyCard(@Param("userId") int userId);
 	 
@@ -160,13 +161,12 @@ public interface BookStoreMapper {
 	  * @return
 	  */
 	 @Select({
-		 "select c.book_id,c.number,c.user_id,b.book_img,b.book_name,b.book_price " ,
+		 "select c.book_id,c.user_id,b.book_img,b.book_name,b.book_price " ,
 		 "from collect c INNER JOIN book b on c.book_id = b.book_id",
 		 "where c.user_id = #{userId,jdbcType=INTEGER} ORDER BY c.create_dt"
 	    })
 	 @Results({
 	        @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
-	        @Result(column="number", property="number", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
@@ -222,7 +222,7 @@ public interface BookStoreMapper {
 	  * @return
 	  */
 	 @Select({
-		 "select address from address where user_id = #{userId,jdbcType=VARCHAR}"
+		 "select address,address_id from address where user_id = #{userId,jdbcType=VARCHAR}"
 	    })
 	 @Results({
 	        @Result(column="address", property="address", jdbcType=JdbcType.VARCHAR, id=true),
@@ -266,7 +266,7 @@ public interface BookStoreMapper {
 	  * @return
 	  */
 	 @Select({
-		 "select o.order_id,o.book_id,o.number,o.user_id,o.order_status,b.book_img,b.book_name,b.book_price " ,
+		 "select o.order_id,o.book_id,o.number,o.user_id,o.order_status,b.book_img,b.book_name,b.book_price,b.book_introduce" ,
 		 "from my_order o INNER JOIN book b on o.book_id = b.book_id",
 		 "where o.user_id = #{userId,jdbcType=INTEGER} ORDER BY o.create_dt"
 	    })
@@ -279,6 +279,7 @@ public interface BookStoreMapper {
 	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
 	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
 	        @Result(column="order_status", property="orderStatus", jdbcType=JdbcType.INTEGER),
+	        @Result(column="book_introduce", property="bookIntroduce", jdbcType=JdbcType.INTEGER),
 	    })
 	    List<Order> selectMyOrder(@Param("userId") int userId);
 	 
@@ -386,4 +387,15 @@ public interface BookStoreMapper {
 	        "set order_status = #{orderStatus,jdbcType=INTEGER} where order_id = #{orderId,jdbcType=INTEGER}",
 	    })
 	    int updateOrder(int orderStatus,int orderId);
+	 
+	 @Update({
+	        "update user",
+	        "set user_name = #{userName,jdbcType=VARCHAR},", 
+	        "password = #{password,jdbcType=VARCHAR},", 
+	        "Telphone = #{Telphone,jdbcType=VARCHAR},", 	
+	        "mail = #{mail,jdbcType=VARCHAR}", 
+	        "where user_id = #{userId,jdbcType=INTEGER}",
+	    })
+	    int updateUserInfo(UserInfo userInfo);
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.form.RegisterForm;
+import com.example.demo.mapper.model.UserInfo;
 import com.example.demo.server.BookStoreServer;
 
 @Controller
@@ -103,7 +104,7 @@ public class WebController {
 	@RequestMapping("/myCollect")
 	@ResponseBody
     public Object myCollect(int userId) {
-    	return bookStoreServer.selectCard(userId);
+    	return bookStoreServer.selectCollect(userId);
     }
 	
 	/**
@@ -200,4 +201,27 @@ public class WebController {
 	    	return bookStoreServer.deleteOrder(orderId);
 	}
 	
+	/**
+	 * 个人信息修改
+	 * @param userInfo
+	 * @return
+	 */
+	@RequestMapping("/updateUserInfo")
+	@ResponseBody
+	 public Object updateUserInfo(UserInfo userInfo) {
+		 
+		 return bookStoreServer.updateUserInfo(userInfo);
+	 }
+     
+	 /**
+	  * 查询所有书籍
+	  * @return
+	  */
+	@RequestMapping("/seleteAllBook")
+	@ResponseBody
+     public Object seleteAllBook(Integer type) {
+    	 return bookStoreServer.selectAllBook(type);
+     }
+
+     
 }

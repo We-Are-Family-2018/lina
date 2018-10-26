@@ -8,6 +8,7 @@ public class MyCard {
 	private float bookPrice;
 	private int number;
 	private String img;
+	private String bookIntroduce;
 
 	public int getUserId() {
 		return userId;
@@ -55,6 +56,14 @@ public class MyCard {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+
+	public String getBookIntroduce() {
+		return bookIntroduce;
+	}
+
+	public void setBookIntroduce(String bookIntroduce) {
+		this.bookIntroduce = bookIntroduce;
 	}
 
 }
