@@ -397,5 +397,79 @@ public interface BookStoreMapper {
 	        "where user_id = #{userId,jdbcType=INTEGER}",
 	    })
 	    int updateUserInfo(UserInfo userInfo);
+	 
+	 /**
+	  * 待付款
+	  * @return
+	  */
+	 @Select({
+		 "select o.order_id,o.book_id,o.number,o.user_id,o.order_status,b.book_img,b.book_name,b.book_price " ,
+		 "from my_order o INNER JOIN book b on o.book_id = b.book_id",
+		 "where o.order_status = 0 and user_id = #{userId,jdbcType=INTEGER}",
+		 "ORDER BY o.create_dt"
+	    })
+	 @Results({
+		    @Result(column="order_id", property="orderId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="number", property="number", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
+	        @Result(column="order_status", property="orderStatus", jdbcType=JdbcType.INTEGER),
+	    })
+	    List<Order> waitePayBook(int userId);
+	 
+	 /**
+	  * 待收货
+	  * @return
+	  */
+	 @Select({
+		 "select o.order_id,o.book_id,o.number,o.user_id,o.order_status,b.book_img,b.book_name,b.book_price " ,
+		 "from my_order o INNER JOIN book b on o.book_id = b.book_id",
+		 "where o.order_status = 1 and user_id = #{userId,jdbcType=INTEGER}",
+		 "ORDER BY o.create_dt"
+	    })
+	 @Results({
+		    @Result(column="order_id", property="orderId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="number", property="number", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
+	        @Result(column="order_status", property="orderStatus", jdbcType=JdbcType.INTEGER),
+	    })
+	    List<Order> waiteGetBook(int userId);
+	 
+	 /**
+	  * 以收货
+	  * @return
+	  */
+	 @Select({
+		 "select o.order_id,o.book_id,o.number,o.user_id,o.order_status,b.book_img,b.book_name,b.book_price " ,
+		 "from my_order o INNER JOIN book b on o.book_id = b.book_id",
+		 "where o.order_status = 2 and user_id = #{userId,jdbcType=INTEGER}",
+		 "ORDER BY o.create_dt"
+	    })
+	 @Results({
+		    @Result(column="order_id", property="orderId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="number", property="number", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
+	        @Result(column="order_status", property="orderStatus", jdbcType=JdbcType.INTEGER),
+	    })
+	    List<Order> yetGetBook(int userId);
+	 
+	 
+	 @Update({
+	        "update my_order",
+	        "set order_status = 2",
+	        "where user_id = #{userId,jdbcType=INTEGER} and order_id = #{orderId,jdbcType=INTEGER}",
+	    })
+	 int confirmOrder(@Param("userId")int userId,@Param("orderId")int orderId);
 	
 }

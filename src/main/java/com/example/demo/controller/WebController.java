@@ -222,6 +222,53 @@ public class WebController {
      public Object seleteAllBook(Integer type) {
     	 return bookStoreServer.selectAllBook(type);
      }
-
-     
+	
+	/**
+	 * 待付款数据
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping("/waitePay")
+	@ResponseBody
+	public Object waitePay(int userId) {
+   	 return bookStoreServer.waitePayBook(userId);
+    }
+	
+	/**
+	 * 待收获数据
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping("/waiteGetBook")
+	@ResponseBody
+	public Object waiteGetBook(int userId) {
+  	 return bookStoreServer.waiteGetBook(userId);
+   }
+	
+	/**
+	 * 已收获数据
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping("/yetGetBook")
+	@ResponseBody
+	public Object yetGetBook(int userId) {
+  	 return bookStoreServer.yetGetBook(userId);
+   }
+	
+	/**
+	 * 
+	 * @param userId
+	 * @param ordreId
+	 * @return
+	 */
+	@RequestMapping("/confirmOrder")
+	@ResponseBody
+   public Object confirmOrder(int userId,int orderId) {
+	   return bookStoreServer.confirmOrder(userId,orderId);
+   }	
+   
 }

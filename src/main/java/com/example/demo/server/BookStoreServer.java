@@ -221,13 +221,53 @@ public class BookStoreServer {
     }
     
     /**
-     * 
+     * 更新用户信息
      * @param orderStatus
      * @param orderId
      * @return
      */
     public int updateUserInfo(UserInfo userInfo) {
     	return bookStoreMapper.updateUserInfo(userInfo); 
+    }
+    
+    /**
+     * 待支付
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    public List<Order> waitePayBook(int userId){
+    	return bookStoreMapper.waitePayBook(userId);
+    }
+    
+    /**
+     * 带收货
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    public List<Order> waiteGetBook(int userId){
+    	return bookStoreMapper.waiteGetBook(userId);
+    }
+    
+    /**
+     * 已收货
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    public List<Order> yetGetBook(int userId){
+    	return bookStoreMapper.yetGetBook(userId);
+    }
+    
+    /**
+     * 确认收货
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    public int confirmOrder(int userId,int orderId) {
+    	return bookStoreMapper.confirmOrder(userId,orderId);
     }
     
 }
