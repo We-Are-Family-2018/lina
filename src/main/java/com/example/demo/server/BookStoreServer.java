@@ -1,8 +1,6 @@
 package com.example.demo.server;
 
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.util.Date;
 import java.util.List;
 
@@ -10,12 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.form.RegisterForm;
+import com.example.demo.form.SearchBookForm;
+import com.example.demo.form.SearchOrderForm;
 import com.example.demo.mapper.BookStoreMapper;
 import com.example.demo.mapper.model.Address;
 import com.example.demo.mapper.model.BookInfo;
 import com.example.demo.mapper.model.MyCard;
 import com.example.demo.mapper.model.Order;
+import com.example.demo.mapper.model.OrderExtra;
 import com.example.demo.mapper.model.UserInfo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class BookStoreServer {
@@ -181,8 +184,8 @@ public class BookStoreServer {
      * @param bookInfo
      * @return
      */
-    public int editBook(BookInfo bookInfo) {
-    	return bookStoreMapper.updateBook(bookInfo);
+    public int editBook(BookInfo bookInfo) {   	
+    	return bookStoreMapper.updateBookSelective(bookInfo);
     }
     
     public List<BookInfo> selectAllBook(Integer type) {
@@ -192,6 +195,14 @@ public class BookStoreServer {
     	else {
     		return bookStoreMapper.selectTypeAllBook(type);
     	}
+    }
+    
+    public PageInfo<BookInfo> searchBook(SearchBookForm form) {
+    	PageHelper.startPage(form.getPage(), form.getLimit());
+    	List<BookInfo> bookInfos = bookStoreMapper.selectBook(form.getBookType(), form.getBookName());
+    	PageInfo<BookInfo> bookInfoPage = new PageInfo<>(bookInfos);
+    	
+    	return bookInfoPage;
     }
     
     /**
@@ -208,6 +219,18 @@ public class BookStoreServer {
      */
     public List<Order> selectAllOrder(){
     	return bookStoreMapper.selectAllOrder();
+    }
+    
+    /**
+     * 搜索订单
+     * @return
+     */
+    public PageInfo<OrderExtra> searchOrder(SearchOrderForm form){
+    	PageHelper.startPage(form.getPage(), form.getLimit());
+    	List<OrderExtra> orderInfos = bookStoreMapper.selectOrder(form.getOrderStatus());
+    	PageInfo<OrderExtra> orderInfoPage = new PageInfo<>(orderInfos);
+    	
+    	return orderInfoPage;
     }
     
     /**

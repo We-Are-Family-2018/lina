@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 
 import com.example.demo.form.RegisterForm;
@@ -17,6 +20,7 @@ import com.example.demo.mapper.model.Address;
 import com.example.demo.mapper.model.BookInfo;
 import com.example.demo.mapper.model.MyCard;
 import com.example.demo.mapper.model.Order;
+import com.example.demo.mapper.model.OrderExtra;
 import com.example.demo.mapper.model.UserInfo;
 
 public interface BookStoreMapper {
@@ -301,8 +305,9 @@ public interface BookStoreMapper {
 	        "book_name,book_author,book_introduce,book_type,book_img,book_price",
 	        ")", 
 	        "values (#{bookName,jdbcType=VARCHAR},#{bookAuthor,jdbcType=VARCHAR},#{bookIntroduce,jdbcType=VARCHAR},",
-	        "#{bookType,jdbcType=INTEGER},#{book_img,jdbcType=VARCHAR},#{bookPrice,jdbcType=INTEGER})"
+	        "#{bookType,jdbcType=INTEGER},#{img,jdbcType=VARCHAR},#{bookPrice,jdbcType=FLOAT})"
 	    })
+	 @Options(useGeneratedKeys = true, keyProperty = "bookId", keyColumn = "book_id")
 	    int insertBook(BookInfo bookInfo);
 	 
 	 @Delete({
@@ -313,15 +318,18 @@ public interface BookStoreMapper {
 	 
 	 @Update({
 	        "update book",
-	        "set book_name = #{bookName,jdbcType=TIMESTAMP},",
-	          "book_author = #{bookAuthor,jdbcType=TIMESTAMP},",
-	          "book_introduce = #{bookIntroduce,jdbcType=VARCHAR}",
-	          "book_type = #{bookType,jdbcType=VARCHAR}",
-	          "book_img = #{bookImg,jdbcType=VARCHAR}",
-	          "book_price = #{bookPrice,jdbcType=INTEGER}",
+	        "set book_name = #{bookName,jdbcType=VARCHAR},",
+	          "book_author = #{bookAuthor,jdbcType=VARCHAR},",
+	          "book_introduce = #{bookIntroduce,jdbcType=VARCHAR},",
+	          "book_type = #{bookType,jdbcType=INTEGER},",
+	          "book_img = #{img,jdbcType=VARCHAR},",
+	          "book_price = #{bookPrice,jdbcType=FLOAT}",
 	        "where book_id = #{bookId,jdbcType=INTEGER}"
 	    })
-	    int updateBook(BookInfo bookInfo);
+    int updateBook(BookInfo bookInfo);
+	 
+	 @UpdateProvider(type=BookStoreSqlProvider.class, method="updateBookSelective")
+	 int updateBookSelective(BookInfo bookInfo);
 	 
 	 @Select({
 		 "select * from book where book_type = #{type,jdbcType=INTEGER}",
@@ -351,6 +359,17 @@ public interface BookStoreMapper {
 	    })
 	    List<BookInfo> selectAllBook();
 	 
+	 @SelectProvider(type=BookStoreSqlProvider.class, method="selectBook")
+	 @Results({
+		    @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_author", property="bookAuthor", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_introduce", property="bookIntroduce", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_type", property="bookType", jdbcType=JdbcType.INTEGER),
+	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.FLOAT),
+	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR)
+	    })
+	 List<BookInfo> selectBook(@Param("bookType") Integer bookType, @Param("bookName") String bookName);
 	 
 	 @Select({
 		 "select * from user",
@@ -381,6 +400,20 @@ public interface BookStoreMapper {
 	    })
 	    List<Order> selectAllOrder();
 	 
+	 @SelectProvider(type=BookStoreSqlProvider.class, method="selectOrder")
+	 @Results({
+		    @Result(column="order_id", property="orderId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="book_id", property="bookId", jdbcType=JdbcType.INTEGER, id=true),
+	        @Result(column="number", property="number", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_img", property="img", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_name", property="bookName", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="book_price", property="bookPrice", jdbcType=JdbcType.INTEGER),
+	        @Result(column="book_introduce", property="bookIntroduce", jdbcType=JdbcType.VARCHAR),
+	        @Result(column="order_status", property="orderStatus", jdbcType=JdbcType.INTEGER),
+	    })
+	 List<OrderExtra> selectOrder(@Param("orderStatus") Integer orderStatus);
 	 
 	 @Update({
 	        "update order",
