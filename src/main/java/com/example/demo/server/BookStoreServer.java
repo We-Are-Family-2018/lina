@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.form.RegisterForm;
 import com.example.demo.form.SearchBookForm;
 import com.example.demo.form.SearchOrderForm;
+import com.example.demo.form.SearchUserForm;
 import com.example.demo.mapper.BookStoreMapper;
 import com.example.demo.mapper.model.Address;
 import com.example.demo.mapper.model.BookInfo;
@@ -211,6 +212,17 @@ public class BookStoreServer {
      */
     public List<UserInfo> selectAllUser(){
     	return bookStoreMapper.selectAllUser();
+    }
+    
+    /**
+     * 分页查询用户
+     * @return
+     */
+    public PageInfo<UserInfo> selectUser(SearchUserForm form){
+    	PageHelper.startPage(form.getPage(), form.getLimit());
+    	List<UserInfo> userInfos = bookStoreMapper.selectAllUser();
+    	PageInfo<UserInfo> userInfoPage = new PageInfo<>(userInfos);
+    	return userInfoPage;
     }
     
     /**

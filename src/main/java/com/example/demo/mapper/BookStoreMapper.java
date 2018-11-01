@@ -416,7 +416,7 @@ public interface BookStoreMapper {
 	 List<OrderExtra> selectOrder(@Param("orderStatus") Integer orderStatus);
 	 
 	 @Update({
-	        "update order",
+	        "update my_order",
 	        "set order_status = #{orderStatus,jdbcType=INTEGER} where order_id = #{orderId,jdbcType=INTEGER}",
 	    })
 	    int updateOrder(int orderStatus,int orderId);

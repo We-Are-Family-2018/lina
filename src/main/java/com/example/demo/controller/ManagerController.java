@@ -24,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.form.SearchBookForm;
 import com.example.demo.form.SearchOrderForm;
+import com.example.demo.form.SearchUserForm;
 import com.example.demo.mapper.model.BookInfo;
 import com.example.demo.mapper.model.Order;
 import com.example.demo.mapper.model.OrderExtra;
 import com.example.demo.mapper.model.PageData;
+import com.example.demo.mapper.model.UserInfo;
 import com.example.demo.server.BookStoreServer;
 import com.github.pagehelper.PageInfo;
 
@@ -90,8 +92,12 @@ public class ManagerController {
 	 * 查询所有用户
 	 * @return
 	 */
-	public Object selectAllUser() {
-		return bookStoreServer.selectAllUser();
+	@RequestMapping("/searchUser")
+	@ResponseBody
+	public Object selectAllUser(SearchUserForm form) {
+		PageInfo<UserInfo> pageInfo = bookStoreServer.selectUser(form);
+		PageData data = new PageData(pageInfo.getTotal(), pageInfo.getList());
+		return data;
 	}
 	
 	/**
@@ -104,6 +110,12 @@ public class ManagerController {
 		PageInfo<OrderExtra> pageInfo = bookStoreServer.searchOrder(form);
 		PageData data = new PageData(pageInfo.getTotal(), pageInfo.getList());
 		return data;
+	}
+	
+	@RequestMapping("/updateOrderStatus")
+	@ResponseBody
+	public Object updateOrderStatus(int orderId, int orderStatus) {
+		return bookStoreServer.updateOrderEdit(orderStatus, orderId);
 	}
 	
 	@RequestMapping("/uploadBookImg")
